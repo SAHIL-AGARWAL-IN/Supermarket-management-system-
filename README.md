@@ -21,5 +21,7 @@ and owner to manage sku's in in the market.<br>
 • View Inventory: List all products with their details.<br>
 • Check Stock Levels: Notify when stock is low for certain products<br>
 
+****Project requires (project.c),(drawer_cash.txt),(data.txt) files to work ****
+
 
 Author-Sahil Agarwal(admin)
