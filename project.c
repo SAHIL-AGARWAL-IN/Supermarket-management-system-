@@ -25,15 +25,13 @@ void update_items_customer();              //called inside generate bill-if cust
 void remove_everything();                  //empties whole cart//basically customer leaving without buying anything   called inside generate_bill()
 void print_bill();                         //simplies print the bill called inside generate_bill()
 void final_update_inventory_customer(int updated_quantity,int bill_quantity,char product_name[]);    //called inside update_items_customer() if user decreases quantity from cart then it increases back in inventory this function do that
-
+void withdraw_drawer_cash(int *drawer);
+void deposit_drawer_cash(int *drawer);
 int drawer_cash;
 int main() {      
                       
     int *drawer=&drawer_cash;  
-    FILE *ptr;
-    ptr=fopen("drawer_cash.txt","r");
-    fscanf(ptr,"%d",drawer);
-    fclose(ptr);
+    
     
     char pass[30]="password";
     remove_everything();
@@ -76,8 +74,12 @@ int main() {
             quantity_check();
             int ch;
             while(1){
+                FILE *ptr;
+                ptr=fopen("drawer_cash.txt","r");
+                fscanf(ptr,"%d",drawer);
+                fclose(ptr);
                 printf("How can we help you..\n");
-                printf("Menu:\n1:view_inventory\n2:search_product\n3:display_drawer_cash\n4:delete_product\nEnter choice:");
+                printf("Menu:\n1:view_inventory\n2:search_product\n3:display_drawer_cash\n4:delete_product\n5:Withdraw Drawer cash\n6:Deposit cash in drawer\nEnter choice:");
                 scanf("%d",&ch);
                 switch(ch){
                     case 1:{
@@ -95,13 +97,23 @@ int main() {
                     case 4:{
                         delete_product_owner();
                         break;
-
                     }
+                    case 5:{
+                        withdraw_drawer_cash(drawer);
+                        break;
+                    }
+                    case 6:{
+                        deposit_drawer_cash(drawer);
+                        break;
+                    }
+                    default:
+                    printf("No perfect choice..\n");
                 } 
                 int more;
                 printf("Anything else you want to do(if yes enter 1):");
                 scanf("%d",&more);
                 if(more!=1){
+                    printf("Thank you Sir for using our system..");
                     break;
                 }
             }
@@ -599,5 +611,32 @@ void final_update_inventory_customer(int updated_quantity,int bill_quantity,char
 
 }
 
+void withdraw_drawer_cash(int *drawer){
+    int amount;
+    
+    printf("Enter the amount you want to withdraw:");
+    scanf("%d",&amount);
+    if(*drawer>=amount){
+       FILE *ptr;
+       ptr=fopen("drawer_cash.txt","w");
+       fprintf(ptr,"%d",*drawer-amount);
+       fclose(ptr);
+    }
+    else{
+        printf("You dontn have enough cash in drawer..");
+    }
+}
+void deposit_drawer_cash(int *drawer){
+    int amount;
+    
+    printf("Enter the amount you want to deposit:");
+    scanf("%d",&amount);
+   
+       FILE *ptr;
+       ptr=fopen("drawer_cash.txt","w");
+       fprintf(ptr,"%d",*drawer+amount);
+       fclose(ptr);
+    
+}
 
 
