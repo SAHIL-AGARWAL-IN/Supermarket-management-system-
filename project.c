@@ -25,8 +25,9 @@ void update_items_customer();              //called inside generate bill-if cust
 void remove_everything();                  //empties whole cart//basically customer leaving without buying anything   called inside generate_bill()
 void print_bill();                         //simplies print the bill called inside generate_bill()
 void final_update_inventory_customer(int updated_quantity,int bill_quantity,char product_name[]);    //called inside update_items_customer() if user decreases quantity from cart then it increases back in inventory this function do that
-void withdraw_drawer_cash(int *drawer);
-void deposit_drawer_cash(int *drawer);
+void withdraw_drawer_cash(int *drawer); //used by shopkeeper to withdraw money from drawer
+void deposit_drawer_cash(int *drawer); //used by shopkeeper to deposit money to drawer
+void update_inventory_shopkeeper();   //used by shopkeeper to update items in drawer
 int drawer_cash;
 int main() {      
                       
@@ -79,7 +80,7 @@ int main() {
                 fscanf(ptr,"%d",drawer);
                 fclose(ptr);
                 printf("How can we help you..\n");
-                printf("Menu:\n1:view_inventory\n2:search_product\n3:display_drawer_cash\n4:delete_product\n5:Withdraw Drawer cash\n6:Deposit cash in drawer\nEnter choice:");
+                printf("Menu:\n1:view_inventory\n2:search_product\n3:display_drawer_cash\n4:delete_product\n5:Withdraw Drawer cash\n6:Deposit cash in drawer\n7:Update inventory\nEnter choice:");
                 scanf("%d",&ch);
                 switch(ch){
                     case 1:{
@@ -104,6 +105,10 @@ int main() {
                     }
                     case 6:{
                         deposit_drawer_cash(drawer);
+                        break;
+                    }
+                    case 7:{
+                        update_inventory_shopkeeper();
                         break;
                     }
                     default:
@@ -646,5 +651,149 @@ void deposit_drawer_cash(int *drawer){
        fclose(ptr);
     
 }
+void update_inventory_shopkeeper(){
+    FILE *ptr;
+    ptr=fopen("data.txt","r");
+    char product_name[30];
+    char header[100];
+    data choice;
+    data update[200];
+    fgets(header,sizeof(header),ptr);
+    printf("Enter product name you want to update:");
+    fflush(stdin);
+    gets(product_name);
+    int i=0;
+    int flag=0;
+    while ((fscanf(ptr, "%s %s %s %s %d %d",choice.section, choice.type, choice.brand, choice.name,&choice.price, &choice.quantity)) != EOF) {
+        if(strcompare(product_name,choice.name)==0){
+            flag=1;
+            int ch;
+            printf("Menu:\n1:Update quantity\n2:Update price\n3:Update both:\nEnter choice:");
+            scanf("%d",&ch);
+            switch(ch){
+                case 1:{
+                    int qty;
+                    printf("Enter new quantity:");
+                    scanf("%d",&qty);
+                    if(qty<0){
+                        strcpy(update[i].section,choice.section);
+                        strcpy(update[i].type,choice.type);
+                        strcpy(update[i].brand,choice.brand);
+                        strcpy(update[i].name,choice.name);
+                        update[i].quantity=choice.quantity;
+                        update[i].price=choice.price;
+                        i++;
+                        break;
+                    }
+                    else if(qty==0){
+                        break;
+                    }
+                    strcpy(update[i].section,choice.section);
+                    strcpy(update[i].type,choice.type);
+                    strcpy(update[i].brand,choice.brand);
+                    strcpy(update[i].name,choice.name);
+                    update[i].quantity=qty;
+                    update[i].price=choice.price;
+                    i++;
+                    break;
+                }
+                case 2:{
+                    int price;
+                    printf("Enter new price:");
+                    scanf("%d",&price);
+                    if(price<0){
+                        strcpy(update[i].section,choice.section);
+                        strcpy(update[i].type,choice.type);
+                        strcpy(update[i].brand,choice.brand);
+                        strcpy(update[i].name,choice.name);
+                        update[i].quantity=choice.quantity;
+                        update[i].price=choice.price;
+                        i++;
+                        break;
+                    }
+                    strcpy(update[i].section,choice.section);
+                    strcpy(update[i].type,choice.type);
+                    strcpy(update[i].brand,choice.brand);
+                    strcpy(update[i].name,choice.name);
+                    update[i].quantity=choice.quantity;
+                    update[i].price=price;
+                    i++;
+                    break;
+                }
+                case 3:{
+                    int qty;
+                    printf("Enter new quantity:");
+                    scanf("%d",&qty);
+                    if(qty<0){
+                        strcpy(update[i].section,choice.section);
+                        strcpy(update[i].type,choice.type);
+                        strcpy(update[i].brand,choice.brand);
+                        strcpy(update[i].name,choice.name);
+                        update[i].quantity=choice.quantity;
+                        update[i].price=choice.price;
+                        i++;
+                        break;
+                    }
+                    else if(qty==0){
+                        break;
+                    }
+                    int price;
+                    printf("Enter new price:");
+                    scanf("%d",&price);
+                    if(price<0){
+                        strcpy(update[i].section,choice.section);
+                        strcpy(update[i].type,choice.type);
+                        strcpy(update[i].brand,choice.brand);
+                        strcpy(update[i].name,choice.name);
+                        update[i].quantity=choice.quantity;
+                        update[i].price=choice.price;
+                        i++;
+                        break;
+                    }
+                    strcpy(update[i].section,choice.section);
+                    strcpy(update[i].type,choice.type);
+                    strcpy(update[i].brand,choice.brand);
+                    strcpy(update[i].name,choice.name);
+                    update[i].quantity=qty;
+                    update[i].price=price;
+                    i++;
+                    break;
+                }
+                default:
+                printf("Entered invalid choice..");
+            }
+    }
+    else{
+        strcpy(update[i].section,choice.section);
+        strcpy(update[i].type,choice.type);
+        strcpy(update[i].brand,choice.brand);
+        strcpy(update[i].name,choice.name);
+        update[i].quantity=choice.quantity;
+        update[i].price=choice.price;
+        i++;
 
+    }
+}
+if(flag==0){
+    printf("Enter product section:");
+    gets(update[i].section);
+    printf("Enter product type:");
+    gets(update[i].type);
+    strcpy(update[i].name,product_name);
+    printf("Enter product quantity:");
+    scanf("%d",&update[i].quantity);
+    printf("Enter product price:");
+    scanf("%d",&update[i].price);
+    i++;
+}
+fclose(ptr);
+ptr=fopen("data.txt","w");
+fprintf(ptr,"Section\t\tType\t\tBrand\t\tName\t\tPrice\t\tQuantity\n");
+  
+    for(int j=0;j<i;j++){
+        fprintf(ptr,"%s\t\t%s\t\t%s\t\t%s\t\t%d\t\t%d\n",update[j].section,update[j].type,update[j].brand,update[j].name,update[j].price,update[j].quantity);
+    }
+    fclose(ptr);
+
+}
 
