@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-#include <stdlib.h>i8i8i8i8
+#include <stdlib.h>
 
 typedef struct data {
     char section[30];
