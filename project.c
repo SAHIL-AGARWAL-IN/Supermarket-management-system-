@@ -25,10 +25,16 @@ void update_items_customer();              //called inside generate bill-if cust
 void remove_everything();                  //empties whole cart//basically customer leaving without buying anything   called inside generate_bill()
 void print_bill();                         //simplies print the bill called inside generate_bill()
 void final_update_inventory_customer(int updated_quantity,int bill_quantity,char product_name[]);    //called inside update_items_customer() if user decreases quantity from cart then it increases back in inventory this function do that
-int drawer_cash=50000;  
 
-int main() {                       
+int drawer_cash;
+int main() {      
+                      
     int *drawer=&drawer_cash;  
+    FILE *ptr;
+    ptr=fopen("drawer_cash.txt","r");
+    fscanf(ptr,"%d",drawer);
+    fclose(ptr);
+    
     char pass[30]="password";
     remove_everything();
    
