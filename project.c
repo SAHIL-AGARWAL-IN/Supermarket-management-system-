@@ -568,7 +568,15 @@ void print_bill(){
         sum+=choice.price*choice.quantity;
     }
     printf("Total Amount:%d\n",sum);
-    drawer_cash+=sum;
+    int drawer_amount;
+    FILE *ptr1;
+    ptr1=fopen("drawer_cash.txt","r");
+    fscanf(ptr1,"%d",&drawer_amount);
+    fclose(ptr1);
+   
+    ptr1=fopen("drawer_cash.txt","w");
+    fprintf(ptr1,"%d",drawer_amount+sum);
+    fclose(ptr1);
     fclose(ptr);
 }
 void final_update_inventory_customer(int updated_quantity,int bill_quantity,char product_name[]){
